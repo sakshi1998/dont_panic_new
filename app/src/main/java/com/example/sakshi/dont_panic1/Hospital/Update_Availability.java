@@ -1,4 +1,4 @@
-package com.example.sakshi.dont_panic1;
+package com.example.sakshi.dont_panic1.Hospital;
 import com.example.sakshi.dont_panic1.FirebaseInstanceIDService;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.sakshi.dont_panic1.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

@@ -94,7 +94,7 @@ import java.util.Map;
 
             int permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
             if (permission == PackageManager.PERMISSION_GRANTED) {
-                // Request location updates and when an update is
+
 
                 client.requestLocationUpdates(request, new LocationCallback() {
                     @Override

@@ -43,7 +43,7 @@ public class NearestPharmacy extends AppCompatActivity {
 
     double latitude, longitude;
     public static java.lang.StringBuffer stringBuffer = new StringBuffer();
-    String token;
+
 
 
     Button scanButton, viewMapButton;
@@ -63,8 +63,6 @@ public class NearestPharmacy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
-        token = FirebaseInstanceId.getInstance().getToken();
-
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -73,6 +71,10 @@ public class NearestPharmacy extends AppCompatActivity {
         centersListView = findViewById(R.id.hosplist);
         viewMapButton = findViewById(R.id.viewMapButton);
         scanButton = findViewById(R.id.scanButton);
+
+        latitude=getIntent().getDoubleExtra("latitude", 0);
+        longitude=getIntent().getDoubleExtra("longitude", 0);
+
 
         centersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -95,13 +97,12 @@ public class NearestPharmacy extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-
                     updateLoc();
                     GeometryPharmacy.loading = true;
                     loadLocation();
 
                     while (GeometryPharmacy.loading) {
-                        //Log.d("Message=>>>>", "Waiting");
+                        Log.d("Message=>>>>", "Waiting");
                     }
 
 
@@ -130,44 +131,22 @@ public class NearestPharmacy extends AppCompatActivity {
         intent.putExtra("longitude", longitude);
         startActivity(intent);
     }
-
-
     public void updateLoc() {
 
-        //Log.v("dfc","dcv");
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             throw new IllegalArgumentException("No GPS");
         } else if (!Utils.isGooglePlayServicesAvailable(this)) {
             throw new IllegalArgumentException("No Google Play Services Available");
-        } else
-            getLocation();
+        } else getLocation();
 
-
-
-
-        /*int permission = ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION);
-        if (permission == PackageManager.PERMISSION_GRANTED) {
-            startTrackerService();
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST);
-        }*/
     }
 
     void getLocation() {
 
-        if (!Utils.hasLocationPermission(this))
-            Utils.requestLocationPermission(this, 1002);
-
-
-        if (checkLocationPermission()) {
-
+        if(checkLocationPermission()) {
             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
 
             if (location != null) {
                 Log.d("Achieved latitude=>", location.getLatitude() + ", longitide=> " + location.getLongitude());
@@ -178,42 +157,25 @@ public class NearestPharmacy extends AppCompatActivity {
                 location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
 
-
             if (location == null)
-                throw new IllegalArgumentException("Can't trace location");
+                throw new IllegalArgumentException("Cann't trace location");
 
             latitude = location.getLatitude();
             longitude = location.getLongitude();
 
-            databaseReference = FirebaseDatabase.getInstance().getReference();
-            geoFire = new GeoFire(databaseReference);
-
-            geoFire.setLocation(token, new GeoLocation(latitude, longitude), new GeoFire.CompletionListener() {
-                @Override
-                public void onComplete(String key, DatabaseError error) {
-                    if (error != null) {
-                        System.err.println("There was an error saving the location to GeoFire: " + error);
-                    } else {
-                        System.out.println("Location saved on server successfully!");
-                               /*mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).title("user"));
-                               mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));*/
-                    }
-                }
-            });
-
-
-        } else
+        }
+        else
             return;
 
 
     }
 
-    public boolean checkLocationPermission() {
+
+    public boolean checkLocationPermission()
+    {
         String permission = "android.permission.ACCESS_FINE_LOCATION";
         int res = this.checkCallingOrSelfPermission(permission);
         return (res == PackageManager.PERMISSION_GRANTED);
-
-
     }
 
     protected void fillList() {
@@ -238,21 +200,6 @@ public class NearestPharmacy extends AppCompatActivity {
         }
 
 
-/**----for getting smallest distance from the current distance**/
-
-        for(int i=0;i<GeometryPharmacy.detailArrayList.size();i++){
-
-
-            double [] geo=G1.detailArrayList.get(i).getGeometry();
-
-
-            if(  G1.detailArrayList.get(i).getOpeningHours().equals("Opened"))
-            {
-                closest=i;
-                break;
-            }
-
-        }
 
 
 
@@ -260,11 +207,11 @@ public class NearestPharmacy extends AppCompatActivity {
         centersListView.setAdapter(customPlacesAdapter);
         //Home.progressDialog.cancel();
 
-        String s=GeometryPharmacy.detailArrayList.get(closest).getPharmacyName();
+       /* String s=GeometryPharmacy.detailArrayList.get(closest).getPharmacyName();
         double x=GeometryPharmacy.detailArrayList.get(closest).getGeometry()[0];
         double y=GeometryPharmacy.detailArrayList.get(closest).getGeometry()[1];
         //Hosp.showNotification(s,x,y);
-
+        */
     }
 
     void loadLocation() {
@@ -273,10 +220,9 @@ public class NearestPharmacy extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (stringBuffer.length() == 0) {
-                        //Log.d("Messege", "buffer reading");
-                    }
+                    while (stringBuffer.length() == 0)  Log.d("Messege", "buffer reading");
                     GeometryPharmacy.manipulateData(stringBuffer);
+
                 }
             }).start();
         } catch (Exception e) {

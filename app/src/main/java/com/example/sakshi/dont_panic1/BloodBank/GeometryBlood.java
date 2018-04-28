@@ -10,7 +10,7 @@
  *
  */
 
-package com.example.sakshi.dont_panic1.Hospital;
+package com.example.sakshi.dont_panic1.BloodBank;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -18,38 +18,22 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FilterWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Sakshi on 26-Feb-18.
  */
 
-public class GeometryController {
+public class GeometryBlood {
 
     public static boolean loading;
 
-    public static ArrayList<NearbyHospitalsDetail> detailArrayList = new ArrayList();
+    public static ArrayList<BloodDetail> detailArrayList = new ArrayList();
     public static java.lang.StringBuffer stringBuffer = new StringBuffer();
 
     public static void manipulateData(StringBuffer buffer) {
@@ -65,17 +49,17 @@ public class GeometryController {
 
             Log.d("array", "df" + array.length());
 
-            for (int i = 0; i < array.length(); i++) {
+            /*for (int i = 0; i < array.length(); i++) {
                 try {
                     JSONObject jsonObject = array.getJSONObject(i);
-                    NearbyHospitalsDetail hospitalsDetail = new NearbyHospitalsDetail();
+                    BloodDetail hospitalsDetail = new BloodDetail();
 
                     if (jsonObject.getString("name") != null)
-                        hospitalsDetail.setHospitalName(jsonObject.getString("name"));
+                        //hospitalsDetail.setHospitalName(jsonObject.getString("name"));
                     else hospitalsDetail.setHospitalName("Not Available");
 
                     try {
-                        hospitalsDetail.setRating(String.valueOf(jsonObject.getDouble("rating")));
+                        //hospitalsDetail.setRating(String.valueOf(jsonObject.getDouble("rating")));
 
                     } catch (Exception e) {
                         hospitalsDetail.setRating("Not Available");
@@ -84,7 +68,7 @@ public class GeometryController {
 
 
                         String res = jsonObject.getString("place_id");
-                       new ReviewsTask().execute(res);
+                        new ReviewsTask().execute(res);
 
 
 
@@ -109,7 +93,7 @@ public class GeometryController {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
+            }*/
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +104,7 @@ public class GeometryController {
         Log.d("Array Loaded with size ", "Size of " + detailArrayList.size());
     }
 
-   static class ReviewsTask extends AsyncTask<String, String, StringBuffer> {
+    static class ReviewsTask extends AsyncTask<String, String, StringBuffer> {
 
         @Override
         protected StringBuffer doInBackground(String... placeid) {
@@ -140,61 +124,11 @@ public class GeometryController {
                 JSONObject jResult = jObj.getJSONObject("result");
                 JSONArray jReviewArray = jResult.getJSONArray("reviews");
 
-                String csv=" ";
-
                 for (int j = 0; j < jReviewArray.length(); j++) {
-
                     JSONObject jReview = jReviewArray.getJSONObject(j);
-                    String review= jReview.getString("text") ;
-                    String rating=jReview.getString("rating");
+                    Log.e("review", jReview.getString("text") + "\n\n");
 
-                    //csv+=review+","+rating+"|";
-                   /* Log.v("hgh",csv);
-
-                    final Path path;
-
-
-                    try
-                    {
-                        File file = new File("home/sakshi/data.txt");
-                        Log.v("fvv","Achievment");
-
-                        BufferedReader reader = new BufferedReader(new FileReader(file));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            Log.v("dc",line);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        System.err.format("Exception occurred trying to read '%s'.", "yupp");
-                        e.printStackTrace();
-                        return null;
-                    }
-
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        path = Paths.get("/home/sakshi/Desktop");
-
-                        final Path txt = path.resolve("data.txt");
-                        final Path csv1 = path.resolve("data.csv");
-
-                        final Charset utf8 = Charset.forName("UTF-8");
-                        try (
-                                final Scanner scanner = new Scanner(Files.newBufferedReader(txt, utf8));
-                                final PrintWriter pw = new PrintWriter(Files.newBufferedWriter(csv1, utf8, StandardOpenOption.CREATE_NEW))) {
-                            while (scanner.hasNextLine()) {
-                                pw.println(scanner.nextLine().replace('|', ','));
-                            }
-                        }
-
-                    }
-
-                    /*PrintWriter out =new PrintWriter(new BufferedWriter(new FileWriter("com.example.sakshi.dont_panic1.Hospital.data.csv")));
-                    out.println(csv);
-                    out.close();*/
                 }
-
-
                 stringBuffer=buffer1;
                 return buffer1;
             } catch (Exception e) {

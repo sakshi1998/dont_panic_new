@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.sakshi.dont_panic1.Hospital.NearestHospital;
+import com.example.sakshi.dont_panic1.Hospital.Update_Availability;
 import com.example.sakshi.dont_panic1.Pharmacy.NearestPharmacy;
 
 public class Home extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -54,12 +55,7 @@ public class Home extends AppCompatActivity implements NavigationView.OnNavigati
             }
         });
 
-       /** updateinfo.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public  void onClick(View view){
 
-            }
-        });**/
        getpharmacy.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {

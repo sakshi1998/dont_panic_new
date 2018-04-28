@@ -1,29 +1,17 @@
-package com.example.sakshi.dont_panic1.Hospital;
+package com.example.sakshi.dont_panic1.BloodBank;
 
-import android.Manifest;
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -31,14 +19,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.sakshi.dont_panic1.Home;
+
+import com.example.sakshi.dont_panic1.Hospital.GeometryController;
 import com.example.sakshi.dont_panic1.MapsActivity;
 import com.example.sakshi.dont_panic1.R;
 import com.example.sakshi.dont_panic1.UpdateInfo;
-import com.example.sakshi.dont_panic1.Utils;
 import com.example.sakshi.dont_panic1.adapter.CustomPlacesAdapter;
-import com.example.sakshi.dont_panic1.adapter.PlaceAdapter;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -46,35 +33,34 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-/**
- * Created by Sakshi on 26-Feb-18.
- */
-
-public class NearestHospital extends AppCompatActivity {
+public class NearestBloodBanks extends AppCompatActivity {
 
     double latitude, longitude;
     public static java.lang.StringBuffer stringBuffer = new StringBuffer();
+
+
     Button scanButton, viewMapButton;
     ListView centersListView;
-    LocationManager locationManager;
-    GeometryController G1;
 
-    Location location;
-    NearbyHospitalsDetail N1;
+    GeometryBlood G1;
+
+
+    BloodDetail N1;
     public int closest;
-    public static HashMap<String, Integer> result = new HashMap<>();
+
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
 
-
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        N1=new NearbyHospitalsDetail();
+
+
+        N1=new BloodDetail();
         centersListView = findViewById(R.id.hosplist);
         viewMapButton = findViewById(R.id.viewMapButton);
         scanButton = findViewById(R.id.scanButton);
@@ -106,11 +92,11 @@ public class NearestHospital extends AppCompatActivity {
             public void onClick(View view) {
                 try {
 
-                    updateLoc();
-                    GeometryController.loading = true;
+
+                   GeometryBlood.loading = true;
                     loadLocation();
 
-                    while (GeometryController.loading) {
+                    while (GeometryBlood.loading) {
                         //Log.d("Message=>>>>", "Waiting");
                     }
 
@@ -118,80 +104,32 @@ public class NearestHospital extends AppCompatActivity {
                     fillList();
 
                 } catch (IllegalArgumentException e) {
-                    Toast.makeText(NearestHospital.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(NearestBloodBanks.this, e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         });
 
 
     }
+
+
     void listSelection(int i) {
 
-        Intent intent=new Intent(NearestHospital.this,UpdateInfo.class);
-        intent.putExtra("id",GeometryController.detailArrayList.get(i).getHospitalName());
-        intent.putExtra("id2",GeometryController.detailArrayList.get(i).getAddress());
+        Intent intent=new Intent(NearestBloodBanks.this,UpdateInfo.class);
+        //intent.putExtra("id",GeometryBlood.detailArrayList.get(i).getHospitalName());
+        //intent.putExtra("id2",GeometryBlood.detailArrayList.get(i).getAddress());
         startActivity(intent);
     }
 
 
     void viewMapButton() {
-        Intent intent = new Intent(NearestHospital.this,MapsActivity.class);
+        Intent intent = new Intent(NearestBloodBanks.this,MapsActivity.class);
         intent.putExtra("latitude", latitude);
         intent.putExtra("longitude", longitude);
         startActivity(intent);
     }
 
-    public void updateLoc() {
-
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            throw new IllegalArgumentException("No GPS");
-        } else if (!Utils.isGooglePlayServicesAvailable(this)) {
-            throw new IllegalArgumentException("No Google Play Services Available");
-        } else getLocation();
-
-    }
-
-
-
-    void getLocation() {
-
-        if(checkLocationPermission()) {
-            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            if (location != null) {
-                Log.d("Achieved latitude=>", location.getLatitude() + ", longitide=> " + location.getLongitude());
-            }
-
-            if (location == null) {
-                Log.d("GPS PRovider", "Enabled");
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-
-            if (location == null)
-                throw new IllegalArgumentException("Cann't trace location");
-
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-
-        }
-        else
-            return;
-
-
-    }
-
-
-    public boolean checkLocationPermission()
-    {
-        String permission = "android.permission.ACCESS_FINE_LOCATION";
-        int res = this.checkCallingOrSelfPermission(permission);
-        return (res == PackageManager.PERMISSION_GRANTED);
-    }
-
-
-    private void showNotification(String desc,double latitude,double longitude)
+    public void showNotification(String desc,double latitude,double longitude)
     {
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(NOTIFICATION_SERVICE);
@@ -205,7 +143,7 @@ public class NearestHospital extends AppCompatActivity {
         PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setContentTitle(" You should go to "+ desc+" hospital with least distance,Click to get the location" );
+        notificationBuilder.setContentTitle(" You should go to "+ desc+R.string.notification );
 
         notificationBuilder.setContentText(desc);
         notificationBuilder.setLights(Color.parseColor("#0086dd"), 2000, 2000);
@@ -229,8 +167,7 @@ public class NearestHospital extends AppCompatActivity {
     protected void fillList() {
 
         ArrayList<String> placeName = new ArrayList();
-        double lat,lon;
-        double  minDist=Double.MAX_VALUE;
+
 
         for (int i = 0; i < GeometryController.detailArrayList.size(); i++){
             placeName.add(GeometryController.detailArrayList.get(i).getHospitalName());
@@ -251,13 +188,14 @@ public class NearestHospital extends AppCompatActivity {
 
 
 
+
         CustomPlacesAdapter customPlacesAdapter = new CustomPlacesAdapter(this, placeName, ratingText, openNow);
         centersListView.setAdapter(customPlacesAdapter);
-        //Home.progressDialog.cancel();
+        Home.progressDialog.cancel();
 
         String s=GeometryController.detailArrayList.get(closest).getHospitalName();
         double x=GeometryController.detailArrayList.get(closest).getGeometry()[0];
-        double y=GeometryController.detailArrayList.get(closest).getGeometry()[1];
+        double y= GeometryController.detailArrayList.get(closest).getGeometry()[1];
         showNotification(s,x,y);
 
     }
@@ -265,11 +203,13 @@ public class NearestHospital extends AppCompatActivity {
 
     void loadLocation() {
         try {
-            new RetrieveFeedTask().execute();
+            //new NearestBloodBanks().RetrieveFeedTask().execute();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (stringBuffer.length() == 0) Log.d("Messege", "buffer reading");
+                    while (stringBuffer.length() == 0) {
+                        //Log.d("Messege", "buffer reading");
+                    }
                     GeometryController.manipulateData(stringBuffer);
                 }
             }).start();
@@ -284,9 +224,9 @@ public class NearestHospital extends AppCompatActivity {
         @Override
         protected StringBuffer doInBackground(StringBuffer... stringBuffers) {
             try {
-                Log.v("fsf",String.valueOf(latitude));
+
                 StringBuilder stringBuilder = new StringBuilder()
-                        .append("https://maps.googleapis.com/maps/api/place/search/json?rankby=distance&keyword=hospital&location=")
+                        .append("https://maps.googleapis.com/maps/api/place/search/json?rankby=distance&keyword=bloodbank&location=")
                         .append(latitude)
                         .append(",")
                         .append(longitude)
@@ -302,24 +242,19 @@ public class NearestHospital extends AppCompatActivity {
                 String n = "";
                 while((n=bufferedReader.readLine())!=null){
                     buffer.append(n);
+
                 }
 
                 Log.d("loaded ", "Size is " + buffer.length());
 
                 stringBuffer = buffer;
+
                 return buffer;
 
             } catch (Exception e) {
                 return null;
             }
         }
-
-
-
-
-
-
-
 
 
     }

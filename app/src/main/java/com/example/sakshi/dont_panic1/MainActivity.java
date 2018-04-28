@@ -27,7 +27,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.sakshi.dont_panic1.Hospital.NearestHospital;
+import com.example.sakshi.dont_panic1.Pharmacy.NearestPharmacy;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,6 +40,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -45,12 +54,16 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback {
 
     private GoogleMap mMap;
-    /** variables for longitude and latitude */
+
     double longitude, latitude;
     LocationManager locationManager;
     BottomSheetBehavior sheetBehavior;
     Location location;
     CardView bottomsheet;
+    DatabaseReference databaseReference;
+    GeoFire geoFire;
+    String token;
+    FloatingActionButton hospitals,pharmacy,blood;
     LinearLayout layoutBottomSheet;
     private CoordinatorLayout coordinatorLayout;
     @Override
@@ -64,12 +77,20 @@ public class MainActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator);
-
+        token = FirebaseInstanceId.getInstance().getToken();
 
         layoutBottomSheet=findViewById(R.id.bottom_sheet);
 
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         bottomsheet =(CardView)findViewById(R.id.headphone_card) ;
+
+
+
+        hospitals=(FloatingActionButton) findViewById(R.id.fab_add1);
+        pharmacy=(FloatingActionButton) findViewById(R.id.fab_add2);
+        blood=(FloatingActionButton) findViewById(R.id.fab_add3);
+
+
 
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -108,6 +129,35 @@ public class MainActivity extends AppCompatActivity
         }
     });
 
+        hospitals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(MainActivity.this, NearestHospital.class);
+                i.putExtra("latitude",latitude);
+                i.putExtra("longitutde",longitude);
+                startActivity(i);
+
+            }
+        });
+
+        pharmacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(MainActivity.this, NearestPharmacy.class);
+                i.putExtra("latitude",latitude);
+                i.putExtra("longitutde",longitude);
+                startActivity(i);
+            }
+        });
+        blood.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(MainActivity.this, NearestPharmacy.class);
+                i.putExtra("latitude",latitude);
+                i.putExtra("longitutde",longitude);
+                startActivity(i);
+            }
+        });
 
 
 
@@ -222,6 +272,7 @@ public class MainActivity extends AppCompatActivity
             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
+
     void setUpCameraAndMarkers(){
 
 
@@ -277,8 +328,8 @@ public class MainActivity extends AppCompatActivity
                 } else
                     getLocation();
             }
-            catch(Exception e){
-                throw new IllegalArgumentException("No GPS");
+            catch(IllegalArgumentException ie){
+                throw new IllegalArgumentException("NO GPS");
             }
 
         }
@@ -310,7 +361,20 @@ public class MainActivity extends AppCompatActivity
             latitude = location.getLatitude();
             longitude = location.getLongitude();
 
+            databaseReference= FirebaseDatabase.getInstance().getReference();
+            geoFire = new GeoFire(databaseReference);
 
+            geoFire.setLocation(token, new GeoLocation(latitude,longitude), new GeoFire.CompletionListener() {
+                @Override
+                public void onComplete(String key, DatabaseError error) {
+                    if (error != null) {
+                        System.err.println("There was an error saving the location to GeoFire: " + error);
+                    } else {
+                        System.out.println("Location saved on server successfully!");
+
+                    }
+                }
+            });
 
 
         }

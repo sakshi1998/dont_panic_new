@@ -46,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_main1);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.googleMap);
@@ -72,23 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         latitude = getIntent().getDoubleExtra("latitude", 0);
         longitude = getIntent().getDoubleExtra("longitude", 0);
 
-      /*databaseReference= FirebaseDatabase.getInstance().getReference();
-      geoFire = new GeoFire(databaseReference);
 
-        geoFire.setLocation("firebase-hq", new GeoLocation(latitude,longitude), new GeoFire.CompletionListener() {
-            @Override
-            public void onComplete(String key, DatabaseError error) {
-                if (error != null) {
-                    System.err.println("There was an error saving the location to GeoFire: " + error);
-                } else {
-                    System.out.println("Location saved on server successfully!");
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)).title("user"));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(latitude, longitude)));
-                }
-            }
-        });
-
-       //*/
 
         findViewById(R.id.refreshButton).setOnClickListener(new View.OnClickListener() {
             @Override

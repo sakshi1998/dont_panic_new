@@ -11,11 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.example.sakshi.dont_panic1.UpdateAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -114,12 +112,6 @@ public class UpdateInfo extends AppCompatActivity {
 
             }
         });
-
-        /*try {
-            mMessagesDatabaseReference.child("hospitals").child("awais@gmailcom").child("leftSpace").setValue("YourDateHere");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
 
 
 

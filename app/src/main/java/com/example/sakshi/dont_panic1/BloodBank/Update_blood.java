@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.sakshi.dont_panic1.Hospital.Update_Availability;
 import com.example.sakshi.dont_panic1.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,7 +21,7 @@ public class Update_blood extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.update_pharmacy);
+        setContentView(R.layout.update_blood);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         blood_bank = (EditText) findViewById(R.id.name);
@@ -34,6 +36,7 @@ public class Update_blood extends AppCompatActivity {
                 num = available.getText().toString();
 
                 databaseReference.child("bloodbank").child(name).child("bloodtype").child(bloodtype).setValue(num);
+                Toast.makeText(Update_blood.this, "INFORMATION UPDATED", Toast.LENGTH_SHORT).show();
             }
         });
     }

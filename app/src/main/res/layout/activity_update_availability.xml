@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sakshi.dont_panic1.Update_Availability">
+    tools:context="com.example.sakshi.dont_panic1.Hospital.Update_Availability"
+    android:background="#CE93D8">
 
     <TextView
         android:id="@+id/textView1"
@@ -13,6 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:text="No. Of Beds Available"
+        android:textColor="#FFF"
         android:textSize="30sp" />
 
     <EditText
@@ -23,7 +25,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="49dp"
         android:hint="Name....."
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#FFF"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,6 +35,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="73dp"
         android:text="Name Of The Hospital"
+        android:textColor="#FFF"
         android:textSize="30sp"
         android:id="@+id/textView2" />
 
@@ -44,7 +48,8 @@
         android:layout_marginEnd="25dp"
         android:layout_marginTop="40dp"
         android:hint="In Numbers....."
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:textColor="#FFF"/>
 
     <Button
         android:id="@+id/update"

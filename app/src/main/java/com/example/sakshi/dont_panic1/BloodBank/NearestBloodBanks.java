@@ -1,31 +1,29 @@
 package com.example.sakshi.dont_panic1.BloodBank;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.sakshi.dont_panic1.Home;
-
-import com.example.sakshi.dont_panic1.Hospital.GeometryController;
+import com.example.sakshi.dont_panic1.MainActivity;
 import com.example.sakshi.dont_panic1.MapsActivity;
 import com.example.sakshi.dont_panic1.R;
-import com.example.sakshi.dont_panic1.UpdateInfo;
-import com.example.sakshi.dont_panic1.adapter.CustomPlacesAdapter;
-
+import com.example.sakshi.dont_panic1.Utils;
+import com.example.sakshi.dont_panic1.adapter.Blood_udapter;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -44,97 +42,55 @@ public class NearestBloodBanks extends AppCompatActivity {
     ListView centersListView;
 
     GeometryBlood G1;
-
-
+    LocationManager locationManager;
+    Location location;
     BloodDetail N1;
     public int closest;
-
+    private Activity mainActivity;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
-
-
-        Toolbar toolbar =  findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-        N1=new BloodDetail();
-        centersListView = findViewById(R.id.hosplist);
-        viewMapButton = findViewById(R.id.viewMapButton);
-        scanButton = findViewById(R.id.scanButton);
-
-        latitude=getIntent().getDoubleExtra("latitude", 0);
-        longitude=getIntent().getDoubleExtra("longitude", 0);
-
-        centersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d("Selected=> ", i + "");
-                listSelection(i);
-            }
-        });
-
-
-
-
-        viewMapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                viewMapButton();
-            }
-        });
-        scanButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                try {
-
-
-                   GeometryBlood.loading = true;
-                    loadLocation();
-
-                    while (GeometryBlood.loading) {
-                        //Log.d("Message=>>>>", "Waiting");
-                    }
-
-
-                    fillList();
-
-                } catch (IllegalArgumentException e) {
-                    Toast.makeText(NearestBloodBanks.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
 
     }
 
+    public  NearestBloodBanks(Activity activity) {
+        this.mainActivity = activity;
 
-    void listSelection(int i) {
+        try {
 
-        Intent intent=new Intent(NearestBloodBanks.this,UpdateInfo.class);
-        //intent.putExtra("id",GeometryBlood.detailArrayList.get(i).getHospitalName());
-        //intent.putExtra("id2",GeometryBlood.detailArrayList.get(i).getAddress());
-        startActivity(intent);
+            locationManager = (LocationManager)activity. getSystemService(LOCATION_SERVICE);
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                throw new IllegalArgumentException("No GPS");
+            } else if (!Utils.isGooglePlayServicesAvailable(activity)) {
+                throw new IllegalArgumentException("No Google Play Services Available");
+            } else getLocation(activity);
+
+
+
+
+            GeometryBlood.loading = true;
+            loadLocation();
+
+            while (GeometryBlood.loading) {
+                Log.d("Message=>>>>", "Waiting");
+            }
+
+
+            fillList(activity);
+
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(NearestBloodBanks.this, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
-
-    void viewMapButton() {
-        Intent intent = new Intent(NearestBloodBanks.this,MapsActivity.class);
-        intent.putExtra("latitude", latitude);
-        intent.putExtra("longitude", longitude);
-        startActivity(intent);
-    }
 
     public void showNotification(String desc,double latitude,double longitude)
     {
         NotificationManager notificationManager = (NotificationManager)
                 this.getSystemService(NOTIFICATION_SERVICE);
 
-        Intent mIntent = new Intent(this,MapsActivity.class );
+        Intent mIntent = new Intent(this,MapsActivity.class);
 
         mIntent.putExtra("lat", latitude);
         mIntent.putExtra("long",longitude);
@@ -163,54 +119,82 @@ public class NearestBloodBanks extends AppCompatActivity {
 
         notificationManager.notify(0, notification);
     }
+    void getLocation(Activity activity) {
 
-    protected void fillList() {
+        if(checkLocationPermission(activity)) {
+            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        ArrayList<String> placeName = new ArrayList();
+            if (location != null) {
+                Log.d("Achieved latitude=>", location.getLatitude() + ", longitide=> " + location.getLongitude());
+            }
+
+            if (location == null) {
+                Log.d("GPS PRovider", "Enabled");
+                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+
+            if (location == null)
+                throw new IllegalArgumentException("Cann't trace location");
+
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+
+        }
+        else
+            return;
 
 
-        for (int i = 0; i < GeometryController.detailArrayList.size(); i++){
-            placeName.add(GeometryController.detailArrayList.get(i).getHospitalName());
+    }
+    public boolean checkLocationPermission(Activity activity)
+    {
+        String permission = "android.permission.ACCESS_FINE_LOCATION";
+        int res = activity.checkCallingOrSelfPermission(permission);
+        return (res == PackageManager.PERMISSION_GRANTED);
+    }
+
+    protected void fillList(Activity activity) {
+
+        ArrayList<String> placeName = new ArrayList<>();
+
+
+        for (int i = 0; i < GeometryBlood.detailArrayList.size(); i++){
+            placeName.add(GeometryBlood.detailArrayList.get(i).getHospitalName());
 
         }
 
-        ArrayList<String> ratingText = new ArrayList();
-        for (int i = 0; i < GeometryController.detailArrayList.size(); i++){
-            ratingText.add(GeometryController.detailArrayList.get(i).getRating());
+        ArrayList<String> ratingText = new ArrayList<>();
+        for (int i = 0; i < GeometryBlood.detailArrayList.size(); i++){
+            ratingText.add(GeometryBlood.detailArrayList.get(i).getRating());
         }
 
         ArrayList<String> openNow = new ArrayList<>();
-        for (int i = 0; i < GeometryController.detailArrayList.size(); i++){
-            openNow.add(GeometryController.detailArrayList.get(i).getOpeningHours());
+        for (int i = 0; i < GeometryBlood.detailArrayList.size(); i++){
+            openNow.add(GeometryBlood.detailArrayList.get(i).getOpeningHours());
         }
 
+        Blood_udapter customPlacesAdapter = new Blood_udapter(activity, placeName, ratingText, openNow);
+        MainActivity.centersListView.setAdapter(customPlacesAdapter);
+        MainActivity.progressDialog.cancel();
 
-
-
-
-
-        CustomPlacesAdapter customPlacesAdapter = new CustomPlacesAdapter(this, placeName, ratingText, openNow);
-        centersListView.setAdapter(customPlacesAdapter);
-        Home.progressDialog.cancel();
-
-        String s=GeometryController.detailArrayList.get(closest).getHospitalName();
-        double x=GeometryController.detailArrayList.get(closest).getGeometry()[0];
-        double y= GeometryController.detailArrayList.get(closest).getGeometry()[1];
+        /*String s=GeometryBlood.detailArrayList.get(closest).getHospitalName();
+        double x=GeometryBlood.detailArrayList.get(closest).getGeometry()[0];
+        double y= GeometryBlood.detailArrayList.get(closest).getGeometry()[1];
         showNotification(s,x,y);
-
+        */
     }
 
 
     void loadLocation() {
         try {
-            //new NearestBloodBanks().RetrieveFeedTask().execute();
+            new RetrieveFeedTask().execute();
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     while (stringBuffer.length() == 0) {
                         //Log.d("Messege", "buffer reading");
                     }
-                    GeometryController.manipulateData(stringBuffer);
+                    GeometryBlood.manipulateData(stringBuffer);
                 }
             }).start();
         } catch (Exception e) {
@@ -240,8 +224,11 @@ public class NearestBloodBanks extends AppCompatActivity {
                 StringBuffer buffer = new StringBuffer();
 
                 String n = "";
+
                 while((n=bufferedReader.readLine())!=null){
                     buffer.append(n);
+
+                    Log.v("sfvf",n);
 
                 }
 

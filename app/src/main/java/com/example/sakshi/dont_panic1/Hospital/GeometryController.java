@@ -18,28 +18,10 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FilterWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by Sakshi on 26-Feb-18.
@@ -148,50 +130,6 @@ public class GeometryController {
                     String review= jReview.getString("text") ;
                     String rating=jReview.getString("rating");
 
-                    //csv+=review+","+rating+"|";
-                   /* Log.v("hgh",csv);
-
-                    final Path path;
-
-
-                    try
-                    {
-                        File file = new File("home/sakshi/data.txt");
-                        Log.v("fvv","Achievment");
-
-                        BufferedReader reader = new BufferedReader(new FileReader(file));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            Log.v("dc",line);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        System.err.format("Exception occurred trying to read '%s'.", "yupp");
-                        e.printStackTrace();
-                        return null;
-                    }
-
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        path = Paths.get("/home/sakshi/Desktop");
-
-                        final Path txt = path.resolve("data.txt");
-                        final Path csv1 = path.resolve("data.csv");
-
-                        final Charset utf8 = Charset.forName("UTF-8");
-                        try (
-                                final Scanner scanner = new Scanner(Files.newBufferedReader(txt, utf8));
-                                final PrintWriter pw = new PrintWriter(Files.newBufferedWriter(csv1, utf8, StandardOpenOption.CREATE_NEW))) {
-                            while (scanner.hasNextLine()) {
-                                pw.println(scanner.nextLine().replace('|', ','));
-                            }
-                        }
-
-                    }
-
-                    /*PrintWriter out =new PrintWriter(new BufferedWriter(new FileWriter("com.example.sakshi.dont_panic1.Hospital.data.csv")));
-                    out.println(csv);
-                    out.close();*/
                 }
 
 

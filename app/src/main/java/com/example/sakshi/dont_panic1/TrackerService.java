@@ -1,6 +1,5 @@
 package com.example.sakshi.dont_panic1;
 
-import android.*;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -16,7 +15,6 @@ import android.util.Log;
 
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
-import com.firebase.geofire.core.GeoHash;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -26,10 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by sakshi on 21/3/18.
@@ -62,7 +56,7 @@ import java.util.Map;
 
             PendingIntent broadcastIntent = PendingIntent.getBroadcast(
                     this, 0, new Intent(stop), PendingIntent.FLAG_UPDATE_CURRENT);
-            // Create the persistent notification
+
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setContentTitle(getString(R.string.app_name))
                     .setContentText(getString(R.string.notification_text))
@@ -71,6 +65,7 @@ import java.util.Map;
                     .setSmallIcon(R.drawable.ic_launcher_background);
             startForeground(1, builder.build());
         }
+
 
         protected BroadcastReceiver stopReceiver = new BroadcastReceiver() {
             @Override

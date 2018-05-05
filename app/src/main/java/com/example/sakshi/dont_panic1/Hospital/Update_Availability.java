@@ -1,19 +1,14 @@
 package com.example.sakshi.dont_panic1.Hospital;
-import com.example.sakshi.dont_panic1.FirebaseInstanceIDService;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.sakshi.dont_panic1.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.FirebaseInstanceIdService;
 
 public class Update_Availability extends AppCompatActivity {
     EditText hosp_name, num_of_beds;
@@ -35,6 +30,7 @@ public class Update_Availability extends AppCompatActivity {
                 name = hosp_name.getText().toString().toLowerCase();
                 num = Integer.parseInt(num_of_beds.getText().toString());
                 databaseReference.child("Availability").child(name).child("number_of_beds").setValue(num);
+                Toast.makeText(Update_Availability.this, "INFORMATION UPDATED", Toast.LENGTH_SHORT).show();
             }
         });
     }

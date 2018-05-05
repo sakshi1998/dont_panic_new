@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.sakshi.dont_panic1.R;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +34,9 @@ public class Update_medicine extends AppCompatActivity {
                 num = available.getText().toString().toLowerCase();
 
                 databaseReference.child("pharamcy").child(name).child("medicine").child(medicine).setValue(num);
+                Toast.makeText(Update_medicine.this, "INFORMATION UPDATED", Toast.LENGTH_SHORT).show();
+
+
             }
         });
     }

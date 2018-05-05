@@ -3,20 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottom_sheet"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="500dp"
     android:background="#fff"
     android:orientation="vertical"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="56dp"
+    app:behavior_peekHeight="60dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
-
 
 
     <android.support.v7.widget.CardView
         android:id="@+id/headphone_card1"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:contentDescription="Tap tp find Hospital"
         android:foreground="?selectableItemBackground">
 
@@ -31,48 +30,69 @@
 
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fab_add1"
-                    android:layout_marginLeft="24dp"
-                    android:background="@color/primaryDarkColor"
-                    android:layout_margin="24dp"
-                    android:padding="10dp"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_gravity="center|bottom"
-                    android:src="@drawable/ic_local_hospital_black_24dp"
-                    />
+                    android:layout_margin="24dp"
+                    android:layout_marginLeft="24dp"
+                    android:background="@color/primaryDarkColor"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_local_hospital_black_24dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/fab_add1"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="-24dp"
+                    android:text="Hodpitals" />
+
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fab_add2"
-                    android:layout_marginLeft="24dp"
-                    android:layout_toRightOf="@+id/fab_add1"
-                    android:layout_margin="24dp"
-                    android:padding="10dp"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@mipmap/ic_launcher_round"
-                    />
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="149dp"
+                    android:padding="10dp"
+                    android:src="@mipmap/ic_launcher_round" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/fab_add1"
+                    android:layout_marginStart="142dp"
+                    android:layout_marginTop="-24dp"
+                    android:text="Pharmacy" />
+
+
                 <android.support.design.widget.FloatingActionButton
                     android:id="@+id/fab_add3"
-                    android:layout_marginLeft="24dp"
-                    android:layout_toRightOf="@+id/fab_add2"
-                    android:layout_margin="24dp"
-                    android:padding="10dp"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="53dp"
+                    android:padding="10dp"
                     android:src="@drawable/ic_invert_colors_black_24dp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/fab_add1"
+                    android:layout_marginEnd="35dp"
+                    android:layout_marginTop="-24dp"
+                    android:text="Bloodbanks" />
             </RelativeLayout>
 
         </FrameLayout>
 
     </android.support.v7.widget.CardView>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="#000"
-        android:foreground="?attr/selectableItemBackground"
-        android:text="PROCEED PAYMENT"
-        android:textColor="#fff" />
+   <include layout="@layout/activity_location"/>
+
 
 </LinearLayout>

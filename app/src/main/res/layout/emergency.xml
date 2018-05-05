@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.sakshi.dont_panic1.Pharmacy.Update_medicine"
+    android:background="@drawable/gif">
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="10dp"
+        android:text="what are you looking for?"
+        android:layout_marginLeft="90dp"
+        android:textSize="20sp" />
+    <RadioGroup
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioButton1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="Hospital "
+            android:textColor="#FFFFFF"
+            android:buttonTint="@color/darkorange"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Blood banks"
+            android:textColor="#FFFFFF"
+            android:buttonTint="@color/darkorange"
+            android:textStyle="bold"
+            android:textSize="18sp"/>
+
+        <RadioButton
+            android:id="@+id/radioButton3"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="pharmacy"
+            android:buttonTint="@color/darkorange"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"/>
+
+
+
+
+
+
+<Button
+        android:id="@+id/go"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="35dp"
+        android:text="GO"
+        android:textSize="20sp" />
+
+
+    </RadioGroup>
+</RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

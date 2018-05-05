@@ -19,9 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -49,20 +47,20 @@ public class GeometryBlood {
 
             Log.d("array", "df" + array.length());
 
-            /*for (int i = 0; i < array.length(); i++) {
+            for (int i = 0; i < array.length(); i++) {
                 try {
                     JSONObject jsonObject = array.getJSONObject(i);
-                    BloodDetail hospitalsDetail = new BloodDetail();
+                    BloodDetail BloodDetail = new BloodDetail();
 
                     if (jsonObject.getString("name") != null)
-                        //hospitalsDetail.setHospitalName(jsonObject.getString("name"));
-                    else hospitalsDetail.setHospitalName("Not Available");
+                        BloodDetail.setHospitalName(jsonObject.getString("name"));
+                    else BloodDetail.setHospitalName("Not Available");
 
                     try {
-                        //hospitalsDetail.setRating(String.valueOf(jsonObject.getDouble("rating")));
+                        BloodDetail.setRating(String.valueOf(jsonObject.getDouble("rating")));
 
                     } catch (Exception e) {
-                        hospitalsDetail.setRating("Not Available");
+                        BloodDetail.setRating("Not Available");
                     }
                     try {
 
@@ -79,21 +77,21 @@ public class GeometryBlood {
 
                     try {
                         if (jsonObject.getJSONObject("opening_hours").getBoolean("open_now"))
-                            hospitalsDetail.setOpeningHours("Opened");
-                        else hospitalsDetail.setOpeningHours("closed");
+                            BloodDetail.setOpeningHours("Opened");
+                        else BloodDetail.setOpeningHours("closed");
                     } catch (Exception e) {
-                        hospitalsDetail.setOpeningHours("Not Available");
+                        BloodDetail.setOpeningHours("Not Available");
                     }
 
-                    hospitalsDetail.setAddress(jsonObject.getString("vicinity"));
-                    hospitalsDetail.setGeometry(new double[]{jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
+                    BloodDetail.setAddress(jsonObject.getString("vicinity"));
+                    BloodDetail.setGeometry(new double[]{jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lat"),
                             jsonObject.getJSONObject("geometry").getJSONObject("location").getDouble("lng")});
 
-                    detailArrayList.add(hospitalsDetail);
+                    detailArrayList.add(BloodDetail);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }*/
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

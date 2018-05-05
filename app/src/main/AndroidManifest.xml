@@ -71,6 +71,16 @@
                 android:value="com.example.sakshi.dont_panic1.Home" />
         </activity>
         <activity
+            android:name=".BloodBank.NearestBloodBanks"
+            android:label="Choose to enable"
+            android:parentActivityName=".Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sakshi.dont_panic1.Home" />
+        </activity>
+        <activity
             android:name=".UpdateInfo"
             android:label="Choose to enable"
             android:parentActivityName=".Home"
@@ -85,6 +95,35 @@
             android:name=".Emergency"
             android:label="Choose to enable"
             android:parentActivityName=".Home"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sakshi.dont_panic1.Home" />
+        </activity>
+
+        <activity android:name=".Hospital.Update_Availability"
+            android:label="Choose to enable"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.example.sakshi.dont_panic1.Home" />
+        </activity>
+        <activity android:name=".Pharmacy.Update_medicine"
+            android:label="Choose to enable"
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.sakshi.dont_panic1.Home" />
+        </activity>
+
+        <activity android:name=".BloodBank.Update_blood"
+            android:label="Choose to enable"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <meta-data

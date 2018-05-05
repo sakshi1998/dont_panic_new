@@ -9,12 +9,11 @@
     android:contentDescription="@string/Details"
     android:padding="12dp">
 
-
     <FrameLayout
-        android:id="@+id/content_item"
+        android:id = "@+id/content_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#84FFFF"
+        android:background="#EC407A"
         android:padding="4dp">
 
 
@@ -22,12 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_margin="10dp"
-            android:elevation="10dp">
+            android:elevation="10dp"
+            >
 
             <ImageView
                 android:layout_width="62dp"
                 android:layout_height="62dp"
-                android:src="@mipmap/hospital" />
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="18dp"
+                android:src="@drawable/ic_invert_colors_black_24dp" />
 
             <TextView
                 android:id="@+id/placeNameTextView"
@@ -35,8 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="93dp"
-                android:layout_marginTop="13dp"
+                android:layout_marginStart="92dp"
+                android:layout_marginTop="14dp"
                 android:text="Place Name"
                 android:textColor="@android:color/white"
                 android:textSize="12dp"
@@ -46,34 +49,35 @@
                 android:id="@+id/ratingTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="2dp"
-                android:layout_toEndOf="@+id/imageView4"
                 android:text="3.5"
                 android:textColor="@android:color/white"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/imageView4" />
 
             <TextView
                 android:id="@+id/openingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:layout_alignParentBottom="true"
-                android:layout_alignStart="@+id/imageView4"
-                android:layout_marginBottom="13dp"
                 android:text="Open now: "
+                android:textSize="10sp"
+                android:layout_alignParentBottom="true"
                 android:textColor="@android:color/white"
-                android:textSize="10sp" />
+                android:layout_alignStart="@+id/imageView4"
+                android:layout_marginBottom="13dp" />
 
             <Button
                 android:id="@+id/update1"
+                android:textColor="#FFF"
+                android:onClick="Update2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="12dp"
-                android:background="#84FFFF"
-                android:onClick="Update"
+                android:background="#EC407A"
                 android:text="UPDATE">
 
             </Button>
@@ -82,9 +86,9 @@
                 android:id="@+id/imageView4"
                 android:layout_width="25dp"
                 android:layout_height="20dp"
-                android:layout_alignStart="@+id/placeNameTextView"
+                app:srcCompat="@android:drawable/btn_star_big_on"
                 android:layout_centerVertical="true"
-                app:srcCompat="@android:drawable/btn_star_big_on" />
+                android:layout_alignStart="@+id/placeNameTextView" />
 
         </RelativeLayout>
 

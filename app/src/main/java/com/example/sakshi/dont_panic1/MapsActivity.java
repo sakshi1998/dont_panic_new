@@ -18,14 +18,13 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
-import android.widget.CheckBox;
 
-import com.example.sakshi.dont_panic1.Hospital.GeometryController;
 import com.firebase.geofire.GeoFire;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -35,7 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
-    private GoogleMap mMap;
+    public static GoogleMap mMap;
     /** variables for longitude and latitude */
     double longitude, latitude;
     DatabaseReference databaseReference;
@@ -46,10 +45,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main1);
+        setContentView(R.layout.activity_maps);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.googleMap);
+                .findFragmentById(R.id.googleMap1);
         mapFragment.getMapAsync(this);
 
 
@@ -119,11 +118,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     void setUpCameraAndMarkers(){
 
         LatLng latLng;
-        for(int i = 0; i< GeometryController.detailArrayList.size(); i++) {
-            latLng = new LatLng(GeometryController.detailArrayList.get(i).getGeometry()[0], GeometryController.detailArrayList.get(i).getGeometry()[1]);
-            mMap.addMarker(new MarkerOptions().position(latLng).title(GeometryController.detailArrayList.get(i).getHospitalName()));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
+        mMap.addMarker(new MarkerOptions().position(new LatLng(Set_emergency.lat, Set_emergency.lo)).title(Set_emergency.s).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(Set_emergency.lat, Set_emergency.lo),11.0f));
+
     }
 
 

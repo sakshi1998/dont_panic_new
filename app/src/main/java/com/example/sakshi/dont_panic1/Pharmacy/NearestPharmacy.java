@@ -1,11 +1,18 @@
 package com.example.sakshi.dont_panic1.Pharmacy;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -14,10 +21,13 @@ import android.widget.Toast;
 
 import com.example.sakshi.dont_panic1.Hospital.NearestHospital;
 import com.example.sakshi.dont_panic1.MainActivity;
+import com.example.sakshi.dont_panic1.MapsActivity;
+import com.example.sakshi.dont_panic1.R;
 import com.example.sakshi.dont_panic1.Utils;
 import com.example.sakshi.dont_panic1.adapter.pharmacy_udapter;
 import com.firebase.geofire.GeoFire;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseReference;
@@ -40,7 +50,8 @@ public class NearestPharmacy extends AppCompatActivity {
     ListView centersListView;
     LocationManager locationManager;
     GeometryPharmacy G1;
-
+    public static double x,y;
+    public static String s;
     Location location;
     NearestHospital Hosp;
     PharmacyDetail Pd;
@@ -131,9 +142,9 @@ public class NearestPharmacy extends AppCompatActivity {
             placeName.add(GeometryPharmacy.detailArrayList.get(i).getPharmacyName());
             double la= GeometryPharmacy.detailArrayList.get(i).getGeometry()[0];
             double lo=GeometryPharmacy.detailArrayList.get(i).getGeometry()[1];
-            MainActivity.mMap.addMarker(new MarkerOptions().position(new LatLng(la, lo)).title(GeometryPharmacy.detailArrayList.get(i).getPharmacyName()));
+            MainActivity.mMap.addMarker(new MarkerOptions().position(new LatLng(la, lo)).title(GeometryPharmacy.detailArrayList.get(i).getPharmacyName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_parking)))
-            MainActivity.mMap.moveCamera(CameraUpdateFactory.newLatLng( new LatLng(la,lo)));
+            MainActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(la,lo),11.0f));
 
         }
 
@@ -153,14 +164,49 @@ public class NearestPharmacy extends AppCompatActivity {
 
         pharmacy_udapter adapter = new pharmacy_udapter(activity, placeName, ratingText, openNow);
         MainActivity.centersListView.setAdapter(adapter);
-        MainActivity.progressDialog.cancel();
+       // MainActivity.progressDialog.cancel();
 
-       /* String s=GeometryPharmacy.detailArrayList.get(closest).getPharmacyName();
-        double x=GeometryPharmacy.detailArrayList.get(closest).getGeometry()[0];
-        double y=GeometryPharmacy.detailArrayList.get(closest).getGeometry()[1];
-        //Hosp.showNotification(s,x,y);
-        */
+        s=GeometryPharmacy.detailArrayList.get(0).getPharmacyName();
+         x=GeometryPharmacy.detailArrayList.get(0).getGeometry()[0];
+         y=GeometryPharmacy.detailArrayList.get(0).getGeometry()[1];
+        showNotification(activity, s, x, y);
+
     }
+    private void showNotification(Activity activity,String desc,double latitude,double longitude)
+    {
+        NotificationManager notificationManager = (NotificationManager)
+                activity.getSystemService(NOTIFICATION_SERVICE);
+
+        Intent mIntent = new Intent(activity,MapsActivity.class );
+
+        mIntent.putExtra("lat", latitude);
+        mIntent.putExtra("long",longitude);
+
+
+        PendingIntent pIntent = PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(activity);
+        notificationBuilder.setContentTitle(" You should go to "+ desc+" hospital with least distance,Click to get the location" );
+
+        notificationBuilder.setContentText(desc);
+        notificationBuilder.setLights(Color.parseColor("#0086dd"), 2000, 2000);
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        notificationBuilder.setColor(ContextCompat.getColor(activity, R.color.colorAccent));
+        notificationBuilder.setContentIntent(pIntent);
+        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(desc));
+
+        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+        notificationBuilder.setAutoCancel(true);
+
+        Notification notification = notificationBuilder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+
+        notificationManager.notify(0, notification);
+    }
+
 
     void loadLocation() {
         try {

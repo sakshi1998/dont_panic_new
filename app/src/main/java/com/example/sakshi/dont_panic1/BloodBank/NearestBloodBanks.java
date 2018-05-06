@@ -24,6 +24,10 @@ import com.example.sakshi.dont_panic1.MapsActivity;
 import com.example.sakshi.dont_panic1.R;
 import com.example.sakshi.dont_panic1.Utils;
 import com.example.sakshi.dont_panic1.adapter.Blood_udapter;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -44,6 +48,8 @@ public class NearestBloodBanks extends AppCompatActivity {
     GeometryBlood G1;
     LocationManager locationManager;
     Location location;
+    public static double x,y;
+    public static String s;
     BloodDetail N1;
     public int closest;
     private Activity mainActivity;
@@ -85,40 +91,6 @@ public class NearestBloodBanks extends AppCompatActivity {
     }
 
 
-    public void showNotification(String desc,double latitude,double longitude)
-    {
-        NotificationManager notificationManager = (NotificationManager)
-                this.getSystemService(NOTIFICATION_SERVICE);
-
-        Intent mIntent = new Intent(this,MapsActivity.class);
-
-        mIntent.putExtra("lat", latitude);
-        mIntent.putExtra("long",longitude);
-
-
-        PendingIntent pIntent = PendingIntent.getActivity(this, (int) System.currentTimeMillis(), mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setContentTitle(" You should go to "+ desc+R.string.notification );
-
-        notificationBuilder.setContentText(desc);
-        notificationBuilder.setLights(Color.parseColor("#0086dd"), 2000, 2000);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        notificationBuilder.setColor(ContextCompat.getColor(this, R.color.colorAccent));
-        notificationBuilder.setContentIntent(pIntent);
-        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
-                .bigText(desc));
-
-        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-        notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
-        notificationBuilder.setAutoCancel(true);
-
-        Notification notification = notificationBuilder.build();
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-
-        notificationManager.notify(0, notification);
-    }
     void getLocation(Activity activity) {
 
         if(checkLocationPermission(activity)) {
@@ -145,6 +117,41 @@ public class NearestBloodBanks extends AppCompatActivity {
 
 
     }
+    private void showNotification(Activity activity,String desc,double latitude,double longitude)
+    {
+        NotificationManager notificationManager = (NotificationManager)
+                activity.getSystemService(NOTIFICATION_SERVICE);
+
+        Intent mIntent = new Intent(activity,MapsActivity.class );
+
+        mIntent.putExtra("lat", latitude);
+        mIntent.putExtra("long",longitude);
+
+
+        PendingIntent pIntent = PendingIntent.getActivity(activity, (int) System.currentTimeMillis(), mIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(activity);
+        notificationBuilder.setContentTitle(" You should go to "+ desc+" hospital with least distance,Click to get the location" );
+
+        notificationBuilder.setContentText(desc);
+        notificationBuilder.setLights(Color.parseColor("#0086dd"), 2000, 2000);
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        notificationBuilder.setColor(ContextCompat.getColor(activity, R.color.colorAccent));
+        notificationBuilder.setContentIntent(pIntent);
+        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(desc));
+
+        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+        notificationBuilder.setAutoCancel(true);
+
+        Notification notification = notificationBuilder.build();
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+
+        notificationManager.notify(0, notification);
+    }
+
     public boolean checkLocationPermission(Activity activity)
     {
         String permission = "android.permission.ACCESS_FINE_LOCATION";
@@ -159,6 +166,10 @@ public class NearestBloodBanks extends AppCompatActivity {
 
         for (int i = 0; i < GeometryBlood.detailArrayList.size(); i++){
             placeName.add(GeometryBlood.detailArrayList.get(i).getHospitalName());
+            double la= GeometryBlood.detailArrayList.get(i).getGeometry()[0];
+            double lo=GeometryBlood.detailArrayList.get(i).getGeometry()[1];
+            MainActivity.mMap.addMarker(new MarkerOptions().position(new LatLng(la, lo)).title(GeometryBlood.detailArrayList.get(i).getHospitalName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+            MainActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(la,lo),16.0f));
 
         }
 
@@ -174,13 +185,13 @@ public class NearestBloodBanks extends AppCompatActivity {
 
         Blood_udapter customPlacesAdapter = new Blood_udapter(activity, placeName, ratingText, openNow);
         MainActivity.centersListView.setAdapter(customPlacesAdapter);
-        MainActivity.progressDialog.cancel();
+      //  MainActivity.progressDialog.cancel();
 
-        /*String s=GeometryBlood.detailArrayList.get(closest).getHospitalName();
-        double x=GeometryBlood.detailArrayList.get(closest).getGeometry()[0];
-        double y= GeometryBlood.detailArrayList.get(closest).getGeometry()[1];
-        showNotification(s,x,y);
-        */
+         s=GeometryBlood.detailArrayList.get(0).getHospitalName();
+         x=GeometryBlood.detailArrayList.get(0).getGeometry()[0];
+         y= GeometryBlood.detailArrayList.get(0).getGeometry()[1];
+        showNotification(activity,s,x,y);
+
     }
 
 

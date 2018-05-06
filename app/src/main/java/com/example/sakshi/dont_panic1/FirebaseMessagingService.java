@@ -17,11 +17,11 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
     private void showNotification(String message)
     {
-        Intent intent=new Intent(this,Home.class);
+        Intent intent=new Intent(this,Set_emergency.class);
        PendingIntent pi=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         Notification notification=new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("ALERT!")
+                .setContentTitle("EMERGENCY!")
                 .setPriority(Notification.PRIORITY_MAX)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentText(message)

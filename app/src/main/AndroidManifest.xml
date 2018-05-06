@@ -134,7 +134,9 @@
         <activity
             android:name=".MapsActivity"
             android:label="Maps" />
-
+        <activity
+            android:name=".Set_emergency"
+            android:label="Emergecy" />
 
         <receiver android:name=".receiver.location_receiver">
             <intent-filter android:priority="100">

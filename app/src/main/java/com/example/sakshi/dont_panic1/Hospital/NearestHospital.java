@@ -24,6 +24,7 @@ import com.example.sakshi.dont_panic1.R;
 import com.example.sakshi.dont_panic1.Utils;
 import com.example.sakshi.dont_panic1.adapter.CustomPlacesAdapter;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -51,6 +52,8 @@ public class NearestHospital extends AppCompatActivity {
     NearbyHospitalsDetail N1;
     public int closest;
     private Activity mainActivity;
+    public static double x,y;
+    public static String s;
     public static HashMap<String, Integer> result = new HashMap<>();
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,8 +177,8 @@ public class NearestHospital extends AppCompatActivity {
             placeName.add(GeometryController.detailArrayList.get(i).getHospitalName());
             double la=GeometryController.detailArrayList.get(i).getGeometry()[0];
             double lo=GeometryController.detailArrayList.get(i).getGeometry()[1];
-           MainActivity.mMap.addMarker(new MarkerOptions().position(new LatLng(la, lo)).title(GeometryController.detailArrayList.get(i).getHospitalName()));
-           MainActivity.mMap.moveCamera(CameraUpdateFactory.newLatLng( new LatLng(la,lo)));
+           MainActivity.mMap.addMarker(new MarkerOptions().position(new LatLng(la, lo)).title(GeometryController.detailArrayList.get(i).getHospitalName()).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+           MainActivity.mMap.moveCamera(CameraUpdateFactory.newLatLngZoom( new LatLng(la,lo),16.0f));
 
 
         }
@@ -191,22 +194,25 @@ public class NearestHospital extends AppCompatActivity {
         }
 
 
-
+/*Default Best*/
+         x = GeometryController.detailArrayList.get(0).getGeometry()[0];
+         y = GeometryController.detailArrayList.get(0).getGeometry()[1];
+         s = GeometryController.detailArrayList.get(0).getHospitalName();
 
 
         CustomPlacesAdapter customPlacesAdapter = new CustomPlacesAdapter(activity, placeName, ratingText, openNow);
         MainActivity.centersListView.setAdapter(customPlacesAdapter);
 
-        for(int i=0;i<GeometryController.detailArrayList.size();i++) {
+        /*for(int i=0;i<GeometryController.detailArrayList.size();i++) {
             String s = GeometryController.detailArrayList.get(i).getHospitalName();
            //boolean r= check(s);
             //double x = GeometryController.detailArrayList.get(closest).getGeometry()[0];
             //double y = GeometryController.detailArrayList.get(closest).getGeometry()[1];
 
-        }
-        //showNotification(activity, s, x, y);
+        }*/
+        showNotification(activity, s, x, y);
 
-        MainActivity.progressDialog.cancel();
+       // MainActivity.progressDialog.cancel();
     }
 
    /* public boolean check(String s){

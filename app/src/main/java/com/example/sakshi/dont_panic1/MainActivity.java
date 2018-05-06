@@ -10,8 +10,6 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,8 +32,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.Interpolator;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -61,7 +57,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -231,11 +226,11 @@ public class MainActivity extends AppCompatActivity
         View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).
                 getParent()).findViewById(Integer.parseInt("2"));
 
-        // and next place it, for example, on bottom right (as Google Maps app)
+
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
         // position on right bottom
         rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
         rlp.setMargins(30, 30, 0, 0);
 
 
@@ -363,38 +358,23 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void setMarkerBounce( Marker marker) {
-        final Handler handler = new Handler();
-        final long startTime = SystemClock.uptimeMillis();
-        final long duration = 2000;
-        final Interpolator interpolator = new BounceInterpolator();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                long elapsed = SystemClock.uptimeMillis() - startTime;
-                float t = Math.max(1 - interpolator.getInterpolation((float) elapsed/duration), 0);
-                marker.setAnchor(0.5f, 1.0f +  t);
 
-                if (t > 0.0) {
-                    handler.postDelayed(this, 16);
-                } else {
-                    setMarkerBounce(marker);
-                }
-            }
-        });
-    }
     void setUpCameraAndMarkers(){
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng( new LatLng(latitude,longitude)));
         mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("User"));
+
         mMap.addCircle(new CircleOptions()
                 .center(new LatLng(latitude,longitude))
                 .radius(1000)
                 .strokeColor(Color.BLUE)
                 .fillColor(0x220000FF)
                 .strokeWidth(5.0f)
+
         );
+
+
 
     }
 

@@ -134,7 +134,7 @@ public class NearestPharmacy extends AppCompatActivity {
 
     protected void fillList(Activity activity) {
 
-        ArrayList<String> placeName = new ArrayList();
+        ArrayList<String> placeName = new ArrayList<>();
         double lat,lon;
         double  minDist=Double.MAX_VALUE;
 
@@ -148,7 +148,7 @@ public class NearestPharmacy extends AppCompatActivity {
 
         }
 
-        ArrayList<String> ratingText = new ArrayList();
+        ArrayList<String> ratingText = new ArrayList<>();
         for (int i = 0; i < GeometryPharmacy.detailArrayList.size(); i++){
             ratingText.add(GeometryPharmacy.detailArrayList.get(i).getRating());
         }
@@ -164,12 +164,13 @@ public class NearestPharmacy extends AppCompatActivity {
 
         pharmacy_udapter adapter = new pharmacy_udapter(activity, placeName, ratingText, openNow);
         MainActivity.centersListView.setAdapter(adapter);
+
        // MainActivity.progressDialog.cancel();
 
-        s=GeometryPharmacy.detailArrayList.get(0).getPharmacyName();
-         x=GeometryPharmacy.detailArrayList.get(0).getGeometry()[0];
-         y=GeometryPharmacy.detailArrayList.get(0).getGeometry()[1];
-        showNotification(activity, s, x, y);
+       /* s=GeometryPharmacy.detailArrayList.get(0).getPharmacyName();
+        x=GeometryPharmacy.detailArrayList.get(0).getGeometry()[0];
+        y=GeometryPharmacy.detailArrayList.get(0).getGeometry()[1];
+        showNotification(activity, s, x, y);*/
 
     }
     private void showNotification(Activity activity,String desc,double latitude,double longitude)

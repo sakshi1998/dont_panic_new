@@ -28,6 +28,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity
         hospitals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loading("Scanning Hospital Location...");
+              //  loading("Scanning Hospital Location...");
 
                 new NearestHospital(MainActivity.this);
 
@@ -178,7 +179,7 @@ public class MainActivity extends AppCompatActivity
         pharmacy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loading("Scanning pharmacy Location...");
+                //loading("Scanning pharmacy Location...");
 
                 new NearestPharmacy(MainActivity.this);
             }
@@ -209,14 +210,15 @@ public class MainActivity extends AppCompatActivity
         blood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loading("Scanning Location...");
+                //loading("Scanning Location...");
 
                 new NearestBloodBanks(MainActivity.this);
             }
         });
 
 
-
+        if (!Utils.hasLocationPermission(this))
+            Utils.requestLocationPermission(this, 1002);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.googleMap);
@@ -224,15 +226,24 @@ public class MainActivity extends AppCompatActivity
         mapFragment.getMapAsync(this);
 
         View locationButton = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).
-                getParent()).findViewById(Integer.parseInt("2"));
+                getParent()).findViewById(Integer.parseInt("4"));
 
 
         RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
         // position on right bottom
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
-        rlp.setMargins(30, 30, 0, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT,0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP ,0);
 
+        // Update margins, set to 10dp
+        final int margin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 160,
+                getResources().getDisplayMetrics());
+        rlp.setMargins(margin, margin, margin, margin);
+        /*rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0);
+        rlp.setMargins(50, 50, 0, 0);
+        */
 
         findViewById(R.id.zoomInButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,8 +270,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
-        if (!Utils.hasLocationPermission(this))
-            Utils.requestLocationPermission(this, 1002);
+
 
         fab =  findViewById(R.id.fab_add);
         fab.setOnClickListener(new View.OnClickListener() {
